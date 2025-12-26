@@ -64,3 +64,13 @@ dkms.conf
 !*.code-workspace
 *.vsix
 .vscode
+
+# Local 
+hello.c
+hello.mod
+hello.mod.c
+hello.o
+modules.order
+lifo*
+*lifo*
+*modules.*
