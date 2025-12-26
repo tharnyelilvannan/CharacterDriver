@@ -1,6 +1,8 @@
 #include "driver.h"
 
 static uint8_t major;
+struct class *d_class;
+struct device *d_device;
 
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Linux Character Driver");
@@ -53,13 +55,37 @@ int init_driver(void) {
         return major;
     }
     else {
-        printk(KERN_INFO "Initialized. Major number is %d", major);
-        return 0;
+        printk(KERN_INFO "Major number is %d.", major);
     }
+
+    d_class = class_create(THIS_MODULE, "d_class");
+    if (IS_ERR(d_class)) {
+        printk(KERN_ERR "Error creating class.");
+        return -1;
+    }
+    else {
+        printk(KERN_INFO "Created class.");
+    }
+
+    d_device = device_create(d_class, NULL, MKDEV(major, 0), NULL, "d_device");
+    if (IS_ERR(d_device)) {
+        printk(KERN_ERR "Error creating device.");
+        class_destroy(d_class);
+        return -1;
+    }
+    else {
+        printk(KERN_INFO "Created device.");
+    }
+
+    printk(KERN_INFO "Initialized.");
+    return 0;
+
 }
 
 void exit_driver(void) {
     unregister_chrdev(major, "driver");
+    device_destroy(d_class, MKDEV(major, 0));
+    class_destroy(d_class);
     printk(KERN_INFO "Exited.");
 }
 
