@@ -23,6 +23,17 @@ static int dopen(struct inode *inode, struct file *file) {
 static ssize_t dread(struct file *file, char __user *u_buffer, size_t size, loff_t *offset) {
     struct dev_data *d_dev_data;
     d_dev_data = (struct dev_data *) file->private_data;
+
+    unsigned long byte = size - *offset;
+    char k_buffer[1024];
+
+    int err = copy_to_user(u_buffer, k_buffer, byte);
+
+    if (err != 0) {
+        printk(KERN_ERR "Failed to read %d bytes.", err);
+        return -EFAULT;
+    }
+
     printk(KERN_INFO "Read.");
     return 0;
 }
@@ -30,6 +41,17 @@ static ssize_t dread(struct file *file, char __user *u_buffer, size_t size, loff
 static ssize_t dwrite(struct file *file, const char __user *u_buffer, size_t size, loff_t *offset) {
     struct dev_data *d_dev_data;
     d_dev_data = (struct dev_data *) file->private_data;
+
+    unsigned long byte = size - *offset;
+    char k_buffer[1024];
+
+    int err = copy_from_user(k_buffer, u_buffer, byte);
+
+    if (err != 0) {
+        printk(KERN_ERR "Failed to write %d bytes.", err);
+        return -EFAULT;
+    }
+
     printk(KERN_INFO "Wrote.");
     return 0;
 }
