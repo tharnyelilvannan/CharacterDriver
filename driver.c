@@ -12,6 +12,7 @@ struct dev_data {
     struct cdev cdev;
 };
 
+// opens file
 static int dopen(struct inode *inode, struct file *file) {
     struct dev_data *d_dev_data;
     d_dev_data = container_of(inode->i_cdev, struct dev_data, cdev);
@@ -20,6 +21,7 @@ static int dopen(struct inode *inode, struct file *file) {
     return 0;
 }
 
+// allows userspace to read
 static ssize_t dread(struct file *file, char __user *u_buffer, size_t size, loff_t *offset) {
     struct dev_data *d_dev_data;
     d_dev_data = (struct dev_data *) file->private_data;
@@ -38,6 +40,7 @@ static ssize_t dread(struct file *file, char __user *u_buffer, size_t size, loff
     return 0;
 }
 
+// allows userspace to write
 static ssize_t dwrite(struct file *file, const char __user *u_buffer, size_t size, loff_t *offset) {
     struct dev_data *d_dev_data;
     d_dev_data = (struct dev_data *) file->private_data;
@@ -56,6 +59,7 @@ static ssize_t dwrite(struct file *file, const char __user *u_buffer, size_t siz
     return 0;
 }
 
+// release resources
 static int drelease(struct inode *inode, struct file *file) {
     printk(KERN_INFO "Released.");
     return 0;

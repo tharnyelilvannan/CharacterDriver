@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo mknod /dev/driver c $1 0
