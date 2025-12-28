@@ -6,6 +6,8 @@ reg $1
 
 verify
 
+sudo chmod 666 /dev/driver
+
 ~/Driver/test/test
 
 remove
