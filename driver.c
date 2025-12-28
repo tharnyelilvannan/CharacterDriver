@@ -3,6 +3,7 @@
 static uint8_t major;
 struct class *d_class;
 struct device *d_device;
+struct cdev d_cdev;
 
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Linux Character Driver");
@@ -14,18 +15,12 @@ struct dev_data {
 
 // opens file
 static int dopen(struct inode *inode, struct file *file) {
-    struct dev_data *d_dev_data;
-    d_dev_data = container_of(inode->i_cdev, struct dev_data, cdev);
-    file->private_data = d_dev_data;
     printk(KERN_INFO "Opened.");
     return 0;
 }
 
 // allows userspace to read
 static ssize_t dread(struct file *file, char __user *u_buffer, size_t size, loff_t *offset) {
-    struct dev_data *d_dev_data;
-    d_dev_data = (struct dev_data *) file->private_data;
-
     unsigned long byte = size - *offset;
     char k_buffer[1024];
 
@@ -42,9 +37,6 @@ static ssize_t dread(struct file *file, char __user *u_buffer, size_t size, loff
 
 // allows userspace to write
 static ssize_t dwrite(struct file *file, const char __user *u_buffer, size_t size, loff_t *offset) {
-    struct dev_data *d_dev_data;
-    d_dev_data = (struct dev_data *) file->private_data;
-
     unsigned long byte = size - *offset;
     char k_buffer[1024];
 
@@ -84,9 +76,21 @@ int init_driver(void) {
         printk(KERN_INFO "Major number is %d.", major);
     }
 
+    cdev_init(&d_cdev, &fops);
+    d_cdev.owner = THIS_MODULE;
+    int add = cdev_add(&d_cdev, major, 0);
+
+    if (add < 0) {
+        printk(KERN_ERR "Error adding device.");
+        unregister_chrdev(major, "driver");
+        return -1;
+    }
+
     d_class = class_create(THIS_MODULE, "d_class");
     if (IS_ERR(d_class)) {
         printk(KERN_ERR "Error creating class.");
+        cdev_del(&d_cdev);
+        unregister_chrdev(major, "driver");
         return -1;
     }
     else {
@@ -96,6 +100,8 @@ int init_driver(void) {
     d_device = device_create(d_class, NULL, MKDEV(major, 0), NULL, "d_device");
     if (IS_ERR(d_device)) {
         printk(KERN_ERR "Error creating device.");
+        cdev_del(&d_cdev);
+        unregister_chrdev(major, "driver");
         class_destroy(d_class);
         return -1;
     }
@@ -110,6 +116,7 @@ int init_driver(void) {
 
 void exit_driver(void) {
     unregister_chrdev(major, "driver");
+    cdev_del(&d_cdev);
     device_destroy(d_class, MKDEV(major, 0));
     class_destroy(d_class);
     printk(KERN_INFO "Exited.");

@@ -1,5 +1,3 @@
 #!/bin/bash
 
-sudo cp ./driver.ko /lib/modules/$(uname -r)
-
-sudo depmod
+sudo insmod driver.ko

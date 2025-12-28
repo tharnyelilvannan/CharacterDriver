@@ -1,0 +1,11 @@
+#!/bin/bash
+
+load
+
+reg $1
+
+verify
+
+~/Driver/test/test
+
+remove

@@ -73,3 +73,4 @@ hello.o
 lifo*
 *lifo*
 *modules.*
+test/test
