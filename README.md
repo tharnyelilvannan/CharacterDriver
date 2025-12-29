@@ -25,32 +25,29 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 -->
+<div align="center">
 [![project_license][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
-[![GitHub][github-shield]][github-url]
-
+</div>
 
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/github_username/repo_name">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
 
-<h3 align="center">project_title</h3>
+<h3 align="center">Linux Character Driver</h3>
 
   <p align="center">
     project_description
     <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/tharnyelilvannan/CharacterDriver"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
+    <a href="https://github.com/tharnyelilvannan/CharacterDriver">View Demo</a>
     &middot;
-    <a href="https://github.com/github_username/repo_name/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    <a href="https://github.com/tharnyelilvannan/CharacterDriver/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     &middot;
-    <a href="https://github.com/github_username/repo_name/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://github.com/tharnyelilvannan/CharacterDriver/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
   </p>
 </div>
 
@@ -175,16 +172,16 @@ LinkedIn: [linkedin-url](linkedin-url)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
-[contributors-url]: https://github.com/github_username/repo_name/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo_name.svg?style=for-the-badge
-[forks-url]: https://github.com/github_username/repo_name/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo_name.svg?style=for-the-badge
-[stars-url]: https://github.com/github_username/repo_name/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
-[issues-url]: https://github.com/github_username/repo_name/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/tharnyelilvannan/CharacterDriver.svg?style=for-the-badge
+[contributors-url]: https://github.com/tharnyelilvannan/CharacterDriver/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/tharnyelilvannan/CharacterDriver.svg?style=for-the-badge
+[forks-url]: https://github.com/tharnyelilvannan/CharacterDriver/network/members
+[stars-shield]: https://img.shields.io/github/stars/tharnyelilvannan/CharacterDriver.svg?style=for-the-badge
+[stars-url]: https://github.com/tharnyelilvannan/CharacterDriver/stargazers
+[issues-shield]: https://img.shields.io/github/issues/tharnyelilvannan/CharacterDriver.svg?style=for-the-badge
+[issues-url]: https://github.com/tharnyelilvannan/CharacterDriver/issues
+[license-shield]: https://img.shields.io/github/license/tharnyelilvannan/CharacterDriver.svg?style=for-the-badge
+[license-url]: https://github.com/tharnyelilvannan/CharacterDriver/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/tharani-elilvannan
 [github-shield]: https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white
