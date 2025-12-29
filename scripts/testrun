@@ -2,7 +2,11 @@
 
 load
 
-reg $1
+MAJOR=$(dmesg | grep "Major number" | cut -d" " -f8 | tr -d . | head -n 1)
+
+echo $MAJOR
+
+reg $MAJOR
 
 verify
 

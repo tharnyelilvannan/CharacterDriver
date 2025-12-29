@@ -7,3 +7,4 @@
 #include <linux/device.h>
 #include <linux/slab.h>
 #include <linux/uaccess.h>
+#include <linux/circ_buf.h>
