@@ -2,11 +2,12 @@
 
 load
 
-MAJOR=$(dmesg | grep "Major number" | cut -d" " -f8 | tr -d . | head -n 1)
+# does not work, need to rework
+#MAJOR=$(dmesg | grep "Major number" | cut -d" " -f8 | tr -d . | head -n 1)
 
-echo $MAJOR
+#echo $MAJOR
 
-reg $MAJOR
+reg $1
 
 verify
 
