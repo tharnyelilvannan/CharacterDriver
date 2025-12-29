@@ -25,11 +25,9 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 -->
-<div align="center">
+
 [![project_license][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
-</div>
-
 
 <!-- PROJECT LOGO -->
 <br />
@@ -151,7 +149,9 @@ On Linux:
 <!-- CONTACT -->
 ## Contact
 Project Link: [https://github.com/tharnyelilvannan/CharacterDriver](https://github.com/tharnyelilvannan/CharacterDriver)
+
 GitHub Profile: [https://github.com/tharnyelilvannan](https://github.com/tharnyelilvannan)
+
 LinkedIn: [linkedin-url](linkedin-url)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
