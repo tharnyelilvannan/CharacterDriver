@@ -122,8 +122,7 @@ A basic character driver.
 
 <!-- USAGE EXAMPLES -->
 ## Usage
-### Register and Load Module
-### Run Tests
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -146,7 +145,7 @@ Project Link: [https://github.com/tharnyelilvannan/CharacterDriver](https://gith
 
 GitHub Profile: [https://github.com/tharnyelilvannan](https://github.com/tharnyelilvannan)
 
-LinkedIn: [linkedin-url](linkedin-url)
+LinkedIn: [https://linkedin.com/in/tharani-elilvannan](linkedin-url)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
