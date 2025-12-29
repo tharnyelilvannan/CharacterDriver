@@ -13,6 +13,13 @@ struct dev_data {
     struct cdev cdev;
 };
 
+struct k_buffer {
+    int head;
+    int tail;
+    char *buf;
+    int size;
+};
+
 // opens file
 static int dopen(struct inode *inode, struct file *file) {
     printk(KERN_INFO "Opened.");
@@ -21,15 +28,6 @@ static int dopen(struct inode *inode, struct file *file) {
 
 // allows userspace to read
 static ssize_t dread(struct file *file, char __user *u_buffer, size_t size, loff_t *offset) {
-    unsigned long byte = size - *offset;
-    char k_buffer[1024];
-
-    int err = copy_to_user(u_buffer, k_buffer, byte);
-
-    if (err != 0) {
-        printk(KERN_ERR "Failed to read %d bytes.", err);
-        return -EFAULT;
-    }
 
     printk(KERN_INFO "Read.");
     return 0;
@@ -37,15 +35,6 @@ static ssize_t dread(struct file *file, char __user *u_buffer, size_t size, loff
 
 // allows userspace to write
 static ssize_t dwrite(struct file *file, const char __user *u_buffer, size_t size, loff_t *offset) {
-    unsigned long byte = size - *offset;
-    char k_buffer[1024];
-
-    int err = copy_from_user(k_buffer, u_buffer, byte);
-
-    if (err != 0) {
-        printk(KERN_ERR "Failed to write %d bytes.", err);
-        return -EFAULT;
-    }
 
     printk(KERN_INFO "Wrote.");
     return 0;
