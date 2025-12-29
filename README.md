@@ -24,10 +24,9 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
--->
-
 [![project_license][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
+-->
 
 <!-- PROJECT LOGO -->
 <br />
@@ -36,7 +35,7 @@
 <h3 align="center">Linux Character Driver</h3>
 
   <p align="center">
-    project_description
+    A basic Linux character driver.
     <br />
     <a href="https://github.com/tharnyelilvannan/CharacterDriver"><strong>Explore the docs »</strong></a>
     <br />
@@ -81,7 +80,6 @@
 ## About The Project
 
 A basic character driver.
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
@@ -101,12 +99,7 @@ A basic character driver.
 
 ### Prerequisites
 
-On Linux:
-  ```sh
-  sudo apt update
-  sudo apt upgrade
-  sudo apt install 
-  ```
+* Linux 
 
 ### Installation
 
@@ -129,7 +122,8 @@ On Linux:
 
 <!-- USAGE EXAMPLES -->
 ## Usage
-
+### Register and Load Module
+### Run Tests
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -165,6 +159,7 @@ LinkedIn: [linkedin-url](linkedin-url)
 * [Testing a Linux Character Driver: A Step-by-Step Guide](https://medium.com/@deeppadmani98.2021/testing-a-linux-character-driver-a-step-by-step-guide-ebf3b11acbb5)
 * [Character Drivers and How to Register One in the Kernel](https://@CreataKulkarni/char-drivers-and-how-to-register-one-into-the-kernel-part-1-80c985527fb6)
 * [Demystifying Character Drivers in Linux](https://thelinuxcode.com/basic-character-driver-linux/)
+* [Configuring the LInux Kernel: Mastering make menuconfig](https://shape.host/resources/configuring-the-linux-kernel-mastering-make-menuconfig)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
