@@ -134,7 +134,6 @@ A basic character driver.
 - [x] Read/Write Functions
 - [ ] Read/Write with Circular Buffer
 - [ ] Mutex Protecton
-- [ ] Nested Feature
 - [ ] Blocking
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
