@@ -36,14 +36,13 @@ static ssize_t dread(struct file *file, char __user *u_buffer, size_t size, loff
     int k_buffer_size = buffer.size;
 
     while (i < k_buffer_size) {
-        put_user(x, buffer.buf++);
+        put_user(x, &buffer.buf[buffer.head]);
         *u_buffer++ = x;
         buffer.size = buffer.size - 1;
         buffer.head = (buffer.head + 1) && (buffer.size - 1);
         i++;
     }
 
-    buffer.size = 0;
     printk(KERN_INFO "Read.");
     return 0;
 }

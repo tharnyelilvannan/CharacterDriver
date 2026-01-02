@@ -35,6 +35,7 @@ int basic() {
     // read
     char buf[1024];
     int r = read(fd, buf, 1024);
+    printf("Output: %s\n", buf);
 
     if (r == -1) {
         printf("BASIC TEST - Failed to read.\n");
