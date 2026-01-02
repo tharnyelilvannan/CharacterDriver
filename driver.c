@@ -16,9 +16,12 @@ struct dev_data {
 struct k_buffer {
     int head;
     int tail;
-    char *buf;
+    char buf[1024];
     int size;
+    int max_len;
 };
+
+struct k_buffer buffer;
 
 // opens file
 static int dopen(struct inode *inode, struct file *file) {
@@ -28,13 +31,35 @@ static int dopen(struct inode *inode, struct file *file) {
 
 // allows userspace to read
 static ssize_t dread(struct file *file, char __user *u_buffer, size_t size, loff_t *offset) {
+    char x;
+    int i = 0;
+    int k_buffer_size = buffer.size;
 
+    while (i < k_buffer_size) {
+        put_user(x, buffer.buf++);
+        *u_buffer++ = x;
+        buffer.size = buffer.size - 1;
+        buffer.head = (buffer.head + 1) && (buffer.size - 1);
+        i++;
+    }
+
+    buffer.size = 0;
     printk(KERN_INFO "Read.");
     return 0;
 }
 
 // allows userspace to write
 static ssize_t dwrite(struct file *file, const char __user *u_buffer, size_t size, loff_t *offset) {
+    char x;
+    int i = 0;
+
+    while (i < size) {
+        get_user(x, u_buffer++);
+        buffer.buf[buffer.tail] = x;
+        buffer.size = buffer.size + 1;
+        buffer.tail = (buffer.tail + 1) && (buffer.size - 1);
+        i++;
+    }
 
     printk(KERN_INFO "Wrote.");
     return 0;
@@ -55,6 +80,8 @@ const struct file_operations fops = {
 };
 
 int init_driver(void) {
+    int add;
+
     // static allocation
     major = register_chrdev(0, "driver", &fops);
     if (major < 0) {
@@ -67,7 +94,11 @@ int init_driver(void) {
 
     cdev_init(&d_cdev, &fops);
     d_cdev.owner = THIS_MODULE;
-    int add = cdev_add(&d_cdev, major, 0);
+    add = cdev_add(&d_cdev, major, 0);
+
+    buffer.max_len = 1024;
+    buffer.head = 0;
+    buffer.tail = 0;
 
     if (add < 0) {
         printk(KERN_ERR "Error adding device.");
