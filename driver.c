@@ -16,10 +16,22 @@ struct dev_data {
 struct k_buffer {
     int head;
     int tail;
-    char buf[1024];
+    char *buf;
     int size;
     int max_len;
 };
+
+void increment_head(void) {
+}
+
+void increment_tail(void) {
+}
+
+void decrement_head(void) {
+}
+
+void decrement_tail(void) {
+}
 
 struct k_buffer buffer;
 
@@ -31,16 +43,43 @@ static int dopen(struct inode *inode, struct file *file) {
 
 // allows userspace to read
 static ssize_t dread(struct file *file, char __user *u_buffer, size_t size, loff_t *offset) {
-    char x;
     int i = 0;
+    int y = 0;
     int k_buffer_size = buffer.size;
+    int err;
+    char *c;
+
+    if (!u_buffer) {
+        return -3;
+    }
 
     while (i < k_buffer_size) {
-        put_user(x, &buffer.buf[buffer.head]);
-        *u_buffer++ = x;
+        printk(KERN_INFO "%p", u_buffer);
+        c = buffer.buf[buffer.head]; // problem line
+        printk(KERN_INFO "%p", u_buffer);
+
+        if (!c) {
+            return -2;
+        }
+
+        printk(KERN_INFO "%p", u_buffer);
+
+        err = put_user(c, u_buffer);
+
+        if (err != 0) {
+            return -1;
+        }
+
+        printk(KERN_INFO "Read: %c", buffer.buf[buffer.head]);
+        u_buffer++;
         buffer.size = buffer.size - 1;
-        buffer.head = (buffer.head + 1) && (buffer.size - 1);
+        buffer.head = (buffer.head + 1);
         i++;
+    }
+
+    while (y < i) {
+        u_buffer--;
+        y++;
     }
 
     printk(KERN_INFO "Read.");
@@ -51,12 +90,19 @@ static ssize_t dread(struct file *file, char __user *u_buffer, size_t size, loff
 static ssize_t dwrite(struct file *file, const char __user *u_buffer, size_t size, loff_t *offset) {
     char x;
     int i = 0;
+    int err;
 
     while (i < size) {
-        get_user(x, u_buffer++);
+        err = get_user(x, u_buffer++);
+
+        if (err != 0) {
+            return -1;
+        }
+
+        printk(KERN_INFO "Wrote: %c", x);
         buffer.buf[buffer.tail] = x;
         buffer.size = buffer.size + 1;
-        buffer.tail = (buffer.tail + 1) && (buffer.size - 1);
+        buffer.tail = (buffer.tail + 1);
         i++;
     }
 
@@ -98,6 +144,7 @@ int init_driver(void) {
     buffer.max_len = 1024;
     buffer.head = 0;
     buffer.tail = 0;
+    buffer.buf = kmalloc(buffer.max_len*sizeof(char), GFP_KERNEL);
 
     if (add < 0) {
         printk(KERN_ERR "Error adding device.");
