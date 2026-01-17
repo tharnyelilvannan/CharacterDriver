@@ -136,9 +136,10 @@ A basic character driver.
    ```
 4. (Optional) Run provided test suite. Replace major_number with the major number on your machine.
     ```sh
+   sudo chmod 666 /dev/driver
    testrun major_number
    ```
-5. Remove module.
+6. Remove module.
    ```sh
    sudo rmmod driver
    ```
