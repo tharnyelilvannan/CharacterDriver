@@ -122,7 +122,26 @@ A basic character driver.
 
 <!-- USAGE EXAMPLES -->
 ## Usage
-
+1. Build module.
+    ```sh
+   make
+   ```
+2. Add module.
+    ```sh
+   sudo insmod driver.ko
+   ```
+3. Check driver major number.
+    ```sh
+   dmesg | grep "major number"
+   ```
+4. (Optional) Run provided test suite. Replace major_number with the major number on your machine.
+    ```sh
+   testrun major_number
+   ```
+5. Remove module.
+   ```sh
+   sudo rmmod driver
+   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -135,6 +154,7 @@ A basic character driver.
 - [x] Read/Write with Circular Buffer
 - [x] Mutex Protecton
 - [ ] Blocking
+- [ ] Dynamic Allocation of Major Number
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
