@@ -13,6 +13,28 @@ struct dev_data {
     struct cdev cdev;
 };
 
+struct k_buffer {
+    int head;
+    int tail;
+    char *buf;
+    int size;
+    int max_len;
+};
+
+void increment_head(void) {
+}
+
+void increment_tail(void) {
+}
+
+void decrement_head(void) {
+}
+
+void decrement_tail(void) {
+}
+
+struct k_buffer buffer;
+
 // opens file
 static int dopen(struct inode *inode, struct file *file) {
     printk(KERN_INFO "Opened.");
@@ -21,14 +43,43 @@ static int dopen(struct inode *inode, struct file *file) {
 
 // allows userspace to read
 static ssize_t dread(struct file *file, char __user *u_buffer, size_t size, loff_t *offset) {
-    unsigned long byte = size - *offset;
-    char k_buffer[1024];
+    int i = 0;
+    int y = 0;
+    int k_buffer_size = buffer.size;
+    int err;
+    char *c;
 
-    int err = copy_to_user(u_buffer, k_buffer, byte);
+    if (!u_buffer) {
+        return -3;
+    }
 
-    if (err != 0) {
-        printk(KERN_ERR "Failed to read %d bytes.", err);
-        return -EFAULT;
+    while (i < k_buffer_size) {
+        printk(KERN_INFO "%p", u_buffer);
+        c = buffer.buf[buffer.head]; // problem line
+        printk(KERN_INFO "%p", u_buffer);
+
+        if (!c) {
+            return -2;
+        }
+
+        printk(KERN_INFO "%p", u_buffer);
+
+        err = put_user(c, u_buffer);
+
+        if (err != 0) {
+            return -1;
+        }
+
+        printk(KERN_INFO "Read: %c", buffer.buf[buffer.head]);
+        u_buffer++;
+        buffer.size = buffer.size - 1;
+        buffer.head = (buffer.head + 1);
+        i++;
+    }
+
+    while (y < i) {
+        u_buffer--;
+        y++;
     }
 
     printk(KERN_INFO "Read.");
@@ -37,14 +88,22 @@ static ssize_t dread(struct file *file, char __user *u_buffer, size_t size, loff
 
 // allows userspace to write
 static ssize_t dwrite(struct file *file, const char __user *u_buffer, size_t size, loff_t *offset) {
-    unsigned long byte = size - *offset;
-    char k_buffer[1024];
+    char x;
+    int i = 0;
+    int err;
 
-    int err = copy_from_user(k_buffer, u_buffer, byte);
+    while (i < size) {
+        err = get_user(x, u_buffer++);
 
-    if (err != 0) {
-        printk(KERN_ERR "Failed to write %d bytes.", err);
-        return -EFAULT;
+        if (err != 0) {
+            return -1;
+        }
+
+        printk(KERN_INFO "Wrote: %c", x);
+        buffer.buf[buffer.tail] = x;
+        buffer.size = buffer.size + 1;
+        buffer.tail = (buffer.tail + 1);
+        i++;
     }
 
     printk(KERN_INFO "Wrote.");
@@ -66,6 +125,8 @@ const struct file_operations fops = {
 };
 
 int init_driver(void) {
+    int add;
+
     // static allocation
     major = register_chrdev(0, "driver", &fops);
     if (major < 0) {
@@ -78,7 +139,12 @@ int init_driver(void) {
 
     cdev_init(&d_cdev, &fops);
     d_cdev.owner = THIS_MODULE;
-    int add = cdev_add(&d_cdev, major, 0);
+    add = cdev_add(&d_cdev, major, 0);
+
+    buffer.max_len = 1024;
+    buffer.head = 0;
+    buffer.tail = 0;
+    buffer.buf = kmalloc(buffer.max_len*sizeof(char), GFP_KERNEL);
 
     if (add < 0) {
         printk(KERN_ERR "Error adding device.");

@@ -2,10 +2,13 @@
 #include <string.h>
 #include <fcntl.h>
 #include "test.h"
+#include <stdlib.h>
 
 // use memset, read, write, printf, open, close to test
 
 int main() {
+    printf("\nTESTS\n");
+
     if (basic() == 0) {
         printf("BASIC TEST - Passed.\n");
     }
@@ -24,24 +27,35 @@ int basic() {
     }
 
     // write
-    const char *str = "Good morning!";
-    int written = write(fd, str, strlen(str));
+    const char str[] = "Hello world!\0";
+    int w = write(fd, str, strlen(str));
     
-    if (written == -1) {
+    if (w != 0) {
         printf("BASIC TEST - Failed to write.\n");
+        close(fd);
         return -1;
     }
 
     // read
-    char buf[1024];
-    int r = read(fd, buf, 1024);
+    char *buf = malloc(sizeof(str)*sizeof(char));
+    int r = read(fd, buf, sizeof(str));
+    printf("BASIC TEST - Output: %s\n", buf);
 
-    if (r == -1) {
+    if (r != 0) {
         printf("BASIC TEST - Failed to read.\n");
+        close(fd);
+        free(buf);
         return -1;
+    }
+
+    if (strcmp(buf, str) != 0) {
+        close(fd);
+        free(buf);
+        return -2;
     }
 
     // close driver
     close(fd);
+    free(buf);
     return 0;
 }
