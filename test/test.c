@@ -15,6 +15,8 @@ int main() {
     else {
         printf("BASIC TEST - Failed.\n");
     }
+
+    printf("\n");
 }
 
 int basic() {

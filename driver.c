@@ -13,6 +13,8 @@ struct dev_data {
     struct cdev cdev;
 };
 
+struct mutex mutex;
+
 struct k_buffer {
     int head;
     int tail;
@@ -21,19 +23,25 @@ struct k_buffer {
     int max_len;
 };
 
-void increment_head(void) {
-}
-
-void increment_tail(void) {
-}
-
-void decrement_head(void) {
-}
-
-void decrement_tail(void) {
-}
-
 struct k_buffer buffer;
+
+int increment_head(void) {
+    if (buffer.size == buffer.max_len) {
+        printk(KERN_INFO "Buffer full.");
+        return -1;
+    }
+
+    return (buffer.head + 1) % buffer.max_len;
+}
+
+int increment_tail(void) {
+    if (buffer.size == buffer.max_len) {
+        printk(KERN_INFO "Buffer full.");
+        return -1;
+    }
+
+    return (buffer.tail + 1) % buffer.max_len;
+}
 
 // opens file
 static int dopen(struct inode *inode, struct file *file) {
@@ -49,20 +57,23 @@ static ssize_t dread(struct file *file, char __user *u_buffer, size_t size, loff
     int err;
     char *c;
 
+    if (mutex_is_locked(&mutex)) {
+        return -3;
+    }
+    else {
+        mutex_lock(&mutex);
+    }
+
     if (!u_buffer) {
         return -3;
     }
 
     while (i < k_buffer_size) {
-        printk(KERN_INFO "%p", u_buffer);
-        c = buffer.buf[buffer.head]; // problem line
-        printk(KERN_INFO "%p", u_buffer);
+        c = buffer.buf[buffer.head]; 
 
         if (!c) {
             return -2;
         }
-
-        printk(KERN_INFO "%p", u_buffer);
 
         err = put_user(c, u_buffer);
 
@@ -73,7 +84,7 @@ static ssize_t dread(struct file *file, char __user *u_buffer, size_t size, loff
         printk(KERN_INFO "Read: %c", buffer.buf[buffer.head]);
         u_buffer++;
         buffer.size = buffer.size - 1;
-        buffer.head = (buffer.head + 1);
+        buffer.head = increment_head();
         i++;
     }
 
@@ -82,6 +93,7 @@ static ssize_t dread(struct file *file, char __user *u_buffer, size_t size, loff
         y++;
     }
 
+    mutex_unlock(&mutex);
     printk(KERN_INFO "Read.");
     return 0;
 }
@@ -91,6 +103,13 @@ static ssize_t dwrite(struct file *file, const char __user *u_buffer, size_t siz
     char x;
     int i = 0;
     int err;
+
+    if (mutex_is_locked(&mutex)) {
+        return -3;
+    }
+    else {
+        mutex_lock(&mutex);
+    }
 
     while (i < size) {
         err = get_user(x, u_buffer++);
@@ -102,10 +121,11 @@ static ssize_t dwrite(struct file *file, const char __user *u_buffer, size_t siz
         printk(KERN_INFO "Wrote: %c", x);
         buffer.buf[buffer.tail] = x;
         buffer.size = buffer.size + 1;
-        buffer.tail = (buffer.tail + 1);
+        buffer.tail = increment_tail();
         i++;
     }
 
+    mutex_unlock(&mutex);
     printk(KERN_INFO "Wrote.");
     return 0;
 }
@@ -146,6 +166,8 @@ int init_driver(void) {
     buffer.tail = 0;
     buffer.buf = kmalloc(buffer.max_len*sizeof(char), GFP_KERNEL);
 
+    mutex_init(&mutex);
+
     if (add < 0) {
         printk(KERN_ERR "Error adding device.");
         unregister_chrdev(major, "driver");
@@ -185,6 +207,7 @@ void exit_driver(void) {
     cdev_del(&d_cdev);
     device_destroy(d_class, MKDEV(major, 0));
     class_destroy(d_class);
+    mutex_destroy(&mutex);
     printk(KERN_INFO "Exited.");
 }
 
