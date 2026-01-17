@@ -132,8 +132,8 @@ A basic character driver.
 ## Roadmap
 
 - [x] Read/Write Functions
-- [ ] Read/Write with Circular Buffer
-- [ ] Mutex Protecton
+- [x] Read/Write with Circular Buffer
+- [x] Mutex Protecton
 - [ ] Blocking
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
