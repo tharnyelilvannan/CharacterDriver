@@ -50,27 +50,21 @@ static ssize_t dread(struct file *file, char __user *u_buffer, size_t size, loff
     char *c;
 
     if (!u_buffer) {
-        return -3;
+        return -EFAULT;
     }
 
     while (i < k_buffer_size) {
-        printk(KERN_INFO "%p", u_buffer);
-        c = buffer.buf[buffer.head]; // problem line
-        printk(KERN_INFO "%p", u_buffer);
-
+        c = buffer.buf[buffer.head];
         if (!c) {
-            return -2;
+            return -EFAULT;
         }
-
-        printk(KERN_INFO "%p", u_buffer);
 
         err = put_user(c, u_buffer);
 
         if (err != 0) {
-            return -1;
+            return -EFAULT;
         }
 
-        printk(KERN_INFO "Read: %c", buffer.buf[buffer.head]);
         u_buffer++;
         buffer.size = buffer.size - 1;
         buffer.head = (buffer.head + 1);
@@ -96,10 +90,9 @@ static ssize_t dwrite(struct file *file, const char __user *u_buffer, size_t siz
         err = get_user(x, u_buffer++);
 
         if (err != 0) {
-            return -1;
+            return -EFAULT;
         }
 
-        printk(KERN_INFO "Wrote: %c", x);
         buffer.buf[buffer.tail] = x;
         buffer.size = buffer.size + 1;
         buffer.tail = (buffer.tail + 1);
@@ -149,7 +142,7 @@ int init_driver(void) {
     if (add < 0) {
         printk(KERN_ERR "Error adding device.");
         unregister_chrdev(major, "driver");
-        return -1;
+        return -EFAULT;
     }
 
     d_class = class_create(THIS_MODULE, "d_class");
@@ -157,7 +150,7 @@ int init_driver(void) {
         printk(KERN_ERR "Error creating class.");
         cdev_del(&d_cdev);
         unregister_chrdev(major, "driver");
-        return -1;
+        return -EFAULT;
     }
     else {
         printk(KERN_INFO "Created class.");
@@ -169,7 +162,7 @@ int init_driver(void) {
         cdev_del(&d_cdev);
         unregister_chrdev(major, "driver");
         class_destroy(d_class);
-        return -1;
+        return -EFAULT;
     }
     else {
         printk(KERN_INFO "Created device.");
