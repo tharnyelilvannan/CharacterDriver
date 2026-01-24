@@ -58,6 +58,7 @@
       <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
+        <li><a href="#built-with">Limitations</a></li>
       </ul>
     </li>
     <li>
@@ -79,7 +80,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-A basic character driver.
+A basic character driver for Linux. 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
@@ -92,6 +93,12 @@ A basic character driver.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+### Limitations
+
+The limitations of this project include:
+* does not validate user input
+* buffer size only 1024
+* will overwrite older data
 
 
 <!-- GETTING STARTED -->
@@ -154,7 +161,7 @@ A basic character driver.
 - [x] Read/Write Functions
 - [x] Read/Write with Circular Buffer
 - [x] Mutex Protecton
-- [ ] Blocking
+- [ ] Poll/Select
 - [ ] Dynamic Allocation of Major Number
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
