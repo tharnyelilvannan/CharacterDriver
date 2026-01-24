@@ -1,4 +1,13 @@
-#include "driver.h"
+#include <linux/kernel.h>
+#include <linux/init.h>
+#include <linux/module.h>
+#include <linux/kdev_t.h>
+#include <linux/fs.h>
+#include <linux/cdev.h>
+#include <linux/device.h>
+#include <linux/slab.h>
+#include <linux/uaccess.h>
+#include <linux/wait.h>
 
 static uint8_t major;
 struct class *d_class;
@@ -62,6 +71,7 @@ static ssize_t dread(struct file *file, char __user *u_buffer, size_t size, loff
         err = put_user(c, u_buffer);
 
         if (err != 0) {
+            printk(KERN_ERR "Error reading.");
             return -EFAULT;
         }
 
@@ -90,6 +100,7 @@ static ssize_t dwrite(struct file *file, const char __user *u_buffer, size_t siz
         err = get_user(x, u_buffer++);
 
         if (err != 0) {
+            printk(KERN_ERR "Error writing.");
             return -EFAULT;
         }
 
