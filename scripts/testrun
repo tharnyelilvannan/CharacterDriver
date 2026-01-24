@@ -2,6 +2,11 @@
 
 load
 
+# does not work, need to rework
+#MAJOR=$(dmesg | grep "Major number" | cut -d" " -f8 | tr -d . | head -n 1)
+
+#echo $MAJOR
+
 reg $1
 
 verify
