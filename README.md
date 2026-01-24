@@ -99,7 +99,7 @@ A basic character driver.
 
 ### Prerequisites
 
-* Linux 
+* Linux (Built with version 5.15.0-139).
 
 ### Installation
 
